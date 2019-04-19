@@ -29,6 +29,7 @@ if(empty($_POST['content'])){
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
   );
+  //post送信された場合DBに接続する。
 
   $dbh = new PDO($dsn, $user, $password, $options);
   $stmt = $dbh->prepare('INSERT INTO posts (content) VALUES (:content)');
@@ -79,66 +80,34 @@ if(empty($_POST['content'])){
       </div>
       <div class="text">
       <?php if(!empty($content)) echo $content; ?>
-      </div>
-      <div class="good_wrap">
-        <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
-      </div>
-    </div>
+      <?php $user = 'root';
+            $password = 'root';
+            $dbName = 'presentword';
+            $host = 'localhost:8889';
+            $dsn = "mysql:host={$host};dbname={$dbName};charset=utf8";
 
-    <div class="content">
-      <div class="goods">
-        <span id="goods-point">0</span>いいね
-      </div>
-      <div class="text">
-      <?php if(!empty($content)) echo $content; ?>
-      </div>
-      <div class="good_wrap">
-        <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
-      </div>
-    </div>
+  try {
+    $pdo = new PDO($dsn, $user, $password);
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = "SELECT * FROM posts";
+    $stm = $pdo->prepare($sql);
+    $stm->execute();
+    $result = $stm->fetchAll(PDO::FETCH_ASSOC);
 
-    <div class="content">
-      <div class="goods">
-        <span id="goods-point">0</span>いいね
-      </div>
-      <div class="text">
-      <?php if(!empty($content)) echo $content; ?>
-      </div>
-      <div class="good_wrap">
-        <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
-      </div>
-    </div>
+    foreach ($result as $row){
 
-    <div class="content">
-      <div class="goods">
-        <span id="goods-point">0</span>いいね
-      </div>
-      <div class="text">
-      <?php if(!empty($content)) echo $content; ?>
-      </div>
-      <div class="good_wrap">
-        <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
-      </div>
-    </div>
+      echo "<td>", ($row['content']), "</td><br>";
 
-    <div class="content">
-      <div class="goods">
-        <span id="goods-point">0</span>いいね
-      </div>
-      <div class="text">
-      <?php if(!empty($content)) echo $content; ?>
-      </div>
-      <div class="good_wrap">
-        <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
-      </div>
-    </div>
+    }
+  }catch (Exception $e) {
+    echo '<span class="error">エラーがありました。</span><br>';
+    echo $e->getMessage();
+    exit();
 
-    <div class="content">
-      <div class="goods">
-        <span id="goods-point">0</span>いいね
-      </div>
-      <div class="text">
-      <?php if(!empty($content)) echo $content; ?>
+    echo es($row['content']);
+  } ?>
+
       </div>
       <div class="good_wrap">
         <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
