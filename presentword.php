@@ -73,13 +73,6 @@ if(empty($_POST['content'])){
   </form>
 </header>
 <main class="main">
-  <section class="contents">
-    <div class="content">
-      <div class="goods">
-        <span id="goods-point">0</span>いいね
-      </div>
-      <div class="text">
-      <?php if(!empty($content)) echo $content; ?>
       <?php $user = 'root';
             $password = 'root';
             $dbName = 'presentword';
@@ -96,9 +89,19 @@ if(empty($_POST['content'])){
     $result = $stm->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($result as $row){
-
+      echo "<section class='contents'>
+              <div class='content'>
+                <div class='goods'>
+                <span id='goods-point'>0</span>いいね
+                </div>
+                <div class='text'>";
       echo "<td>", ($row['content']), "</td><br>";
-
+      echo "    </div>
+                <div class='good_wrap'>
+                  <i class='fa fa-thumbs-o-up fa-2x'></i><i class='fa fa-thumbs-o-up fa-3x'></i>
+                </div>
+              </div>
+            </section>";
     }
   }catch (Exception $e) {
     echo '<span class="error">エラーがありました。</span><br>';
@@ -107,13 +110,6 @@ if(empty($_POST['content'])){
 
     echo es($row['content']);
   } ?>
-
-      </div>
-      <div class="good_wrap">
-        <i class="fa fa-thumbs-o-up fa-2x"></i><i class="fa fa-thumbs-o-up fa-3x"></i>
-      </div>
-    </div>
-  </section>
 </main>
 <footer class="footer">
   &copy; Thank you baby!!
